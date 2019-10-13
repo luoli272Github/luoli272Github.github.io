@@ -22,14 +22,15 @@
 
     <!-- Custom styles for this template -->
     <link href="css/resume.min.css" rel="stylesheet">
-
+	
   </head>
 
   <body id="page-top">
+	  
 <!-- 左边部分star -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
       <a class="navbar-brand js-scroll-trigger" href="#page-top">
-        <span class="d-block d-lg-none">Start Bootstrap</span>
+        <span class="d-block d-lg-none">罗立在线简历</span>
         <span class="d-none d-lg-block">
           <img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="img/profile.jpg" alt="">
         </span>
@@ -61,6 +62,18 @@
         </ul>
       </div>
 	  <!-- 左侧导航栏end -->
+	  <!-- 倒计时模块star -->
+	  <div id="time">
+	    <h6 class="title" id="txt" style="color: #FFFFFF;">距离回家过年，还有</h6>
+	    
+	    <div class="time-item" style="color: #FFFFFF;">
+	  	<span id="day2"><span id="day">00</span>天</span>
+	  	<strong><span id="hour">00</span>时</strong>
+	  	<strong><span id="minute">00</span>分</strong>
+	  	<strong><span id="second">00</span>秒</strong>
+	    </div>
+	  </div>
+	  <!-- 倒计时模块end -->
     </nav>
 <!-- 左边部分end -->
 
@@ -295,7 +308,86 @@
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
     <script src="js/resume.min.js"></script>
-
+	<script>
+		/* ------------------------函数封装开始-------------------------- */
+		// 封装一个根据id获取元素函数
+		function my$(id) {
+			var id = document.getElementById(id);
+			return id;
+		}
+		
+		//处理innerText和textContent兼容性问题
+		// 设置标签之间的内容
+		function setInnerText(element, content) {
+		  // 判断当前浏览器是否支持 innerText
+		  if (typeof element.innerText === 'string') {
+			 element.innerText = content;
+		   } else {
+			 element.textContent = content;
+		   }
+		}
+		
+		// 获取两个日期的时间差
+		function getInterval(start, end) {
+		  // 两个日期对象，相差的毫秒数
+		  var interval = end - start;
+		  // 求 相差的天数/小时数/分钟数/秒数
+		  var day, hour, minute, second;
+	
+		  // 两个日期对象，相差的秒数
+		  // interval = interval / 1000;
+		  interval /= 1000;
+	
+		  day = Math.floor(interval / 60 / 60 / 24);
+		  hour = Math.floor(interval / 60 / 60 % 24);
+		  minute = Math.floor(interval / 60 % 60);
+		  second = Math.floor(interval % 60);
+	
+		  return {//返回一个带有时间属性的对象
+			day: day,
+			hour: hour,
+			minute: minute,
+			second: second
+		  }
+		}
+		/* ------------------------函数封装完毕-------------------------- */
+		  
+		  
+	  // 目标时间
+	  var endDate = new Date('2019-10-26 00:00:00');
+	
+	  // 获取span
+	  var spanDay = my$('day');
+	  var spanHour = my$('hour');
+	  var spanMinute = my$('minute');
+	  var spanSecond = my$('second');
+	
+	  setInterval(countdown, 1000);//把函数名赋给第一个参数
+	
+	  countdown();//先执行一次
+	  // 倒计时
+		//封装成命名函数的目的是,在页面加载时先执行一次函数,不用等待1秒
+	  function countdown() {
+	
+	    // 计算时间差
+	    // 当前时间
+	    var startDate = new Date();
+	    // 计算两个日期差
+	    var interval = getInterval(startDate, endDate);//调用的该函数为封装好的函数，用来计算时间差
+	
+	    setInnerText(spanDay, interval.day);
+	    setInnerText(spanHour, interval.hour);
+	    setInnerText(spanMinute, interval.minute);
+	    setInnerText(spanSecond, interval.second);
+		  
+		  if (spanDay.innerText + spanHour.innerText + spanMinute.innerText + spanSecond.innerText == 0) {
+		  	var txt = document.getElementById('txt');
+		  	txt.style.color = 'red';
+			txt.innerText = '生日快乐！';
+		  }
+	  }
+		
+	</script>
   </body>
 
 </html>
